@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>HTML5带音乐手机摇一摇抽奖代码</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link rel="stylesheet" type="text/css" href="css/animate.min.css">
+<style type="text/css">
+*{margin: 0; padding: 0;}
+body{color: #fff; font-size: 14px; font-size: "微软雅黑";}
+/*红包*/
+.red_bg{background-image:url(img/red-bg.png); position: absolute; height: 100%; width: 100%; background-size: 30px;}
+.red_bg>div.red-ts{background: url(img/red-ts.png); background-repeat: no-repeat; width: 100%; height: 80px; background-size: 200px; background-position: center; margin-top: 5%;}
+.red_bg>div.red-ss-bg{height: 260px; width: 260px; margin: 20px auto; background: #fff; position: relative; border-radius: 100%;}
+.red_bg>div.red-ss-bg::after{content: ' '; width: 101%; height: 101%; position: absolute; top: -0.5%; left: -0.5%; background:url(img/red-ss-bg.png); background-size: cover;}
+.red_bg>div.red-ss-bg>span{background: url(img/red-ss.png); width: 100%; height: 100%; position: absolute; background-size: 60%; background-position: 40% 80%; background-repeat: no-repeat; display: inline-block;}
+
+.red_bg>div.red-jh{width: 60%; font-size: 16px; border-radius: 30px; height: 40px; line-height: 40px; background: rgba(0,0,0,0.45); text-align: center; margin: 0px auto;}
+.red_bg>div.red-jh>span{color: #f3f125; padding: 0px 5px;}
+
+/*提示信息*/
+.red-tc{background: rgba(0,0,0,0.85); position: absolute; width: calc( 100% - 80px ); padding: 0px 40px; height: 100%; top: 0; display: none;}
+.red-yzj>.red-tc-k,.red-tc-btn{width: calc( 100% - 40px ); padding: 20px; background-repeat: no-repeat;}
+.red-yzj>.red-tc-k{background: url(img/red-zj-bg.png); background-size: 100%;  margin-top: 40%; text-align: center; font-size: 16px;}
+.red-yzj>.red-tc-k>img{width: 50%; display: block; margin: 0 auto; padding-bottom: 10px;}
+.red-yzj>.red-tc-k>p{font-size: 20px; padding-bottom: 10px;}
+.red-yzj>.red-tc-k>p>span{font-size: 34px; padding: 0px 5px;}
+.red-yzj>.red-tc-btn{ background: url(img/red-btn-bg.png); background-size: 100%;}
+.red-yzj>.red-tc-btn>button{width: 100%; background: #ff0006; border-radius: 5px; border: none; line-height: 40px; font-size: 18px; color: #fff;}
+</style>
+</head>
+<body>
+<!-- 红包音乐 -->
+<audio id="shakemusic" src="music/red-01.mp3" style="display: none;"></audio>
+<audio id="openmusic" src="music/red-02.mp3" style="display: none;"></audio>
+<!-- End 红包音乐 -->
+<!-- 红包 -->
+<div class="red_bg">
+	<div class="red-ts"></div>
+	<div class="red-ss-bg">
+		<span class="red-ss animated"></span>
+	</div>
+	<div class="red-jh">
+		您还有<span>3</span>次机会
+	</div>
+	<div class="red-tc">
+		<!-- 已中奖 -->
+		<div class="red-yzj">
+			<div class="red-tc-k">
+				<p>￥<span>50.00</span>元</p>
+				恭喜你获得</br>打包幸福代金券
+			</div>
+			<div class="red-tc-btn">
+				<button>查看优惠券</button>
+			</div>
+		</div>
+		<!-- End 已中奖 -->
+		<!-- 未中奖 -->
+		<!--<div class="red-yzj">
+			<div class="red-tc-k">
+				<img src="img/red-bw.png">
+				哎呀！</br>您的优惠券被风刮走了啊
+			</div>
+			<div class="red-tc-btn">
+				<button>再摇一次</button>
+			</div>
+		</div> -->
+		<!-- End 未中奖 -->
+		<!-- 机会用光了 -->
+		<!-- <div class="red-yzj">
+			<div class="red-tc-k">
+				<img src="img/red-jh.png">
+				机会用光了哦！</br>明天再来吧！
+			</div>
+			<div class="red-tc-btn">
+				<button>返回主页</button>
+			</div>
+		</div> -->
+		<!-- End 机会用光了 -->
+	</div>
+</div>
+<!-- End 红包 -->
+<script src="http://ossweb-img.qq.com/images/js/zepto/zepto1.2.min.js"></script> 
+<script type="text/javascript">
+$(document).ready(function() {
+	if (window.DeviceMotionEvent){
+		var speed = 25;
+		var audio = document.getElementById("shakemusic");
+		var openAudio = document.getElementById("openmusic");
+		var x = t = z = lastX = lastY = lastZ = 0;
+		window.addEventListener('devicemotion',
+			function () {
+				var acceleration = event.accelerationIncludingGravity;
+				x = acceleration.x;
+				y = acceleration.y;
+				if (Math.abs(x - lastX) > speed || Math.abs(y - lastY) > speed) {
+					//摇一摇时触发的事件
+					audio.play();//摇一摇音乐播放
+					$('.red-ss').addClass('wobble');//手机添加动画类名
+					setTimeout(function(){
+						audio.pause();//摇一摇音乐停止
+						openAudio.play();//摇一摇完毕音乐播放
+						$('.red-tc').css('display', 'block');//弹窗显示
+					}, 1500);
+				};
+				lastX = x;
+				lastY = y;
+			},false);
+	};
+	$()
+});
+</script>
+</body>
+</html>
